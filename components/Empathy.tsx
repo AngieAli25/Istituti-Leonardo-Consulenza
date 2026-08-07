@@ -3,7 +3,7 @@ export function Empathy() {
   return (
     <section className="bg-brand-muted px-5 py-14 sm:py-16">
       <div className="mx-auto max-w-2xl text-center">
-        <p className="text-sm font-semibold uppercase tracking-wider text-brand-blue">
+        <p className="text-sm font-semibold uppercase tracking-wider text-brand-red">
           Ti riconosci in questo?
         </p>
         <p className="mt-4 text-lg leading-relaxed text-brand-text sm:text-xl">
@@ -14,7 +14,7 @@ export function Empathy() {
         </p>
         <a
           href="#prenota"
-          className="mt-6 inline-block text-sm font-semibold text-brand-red underline-offset-4 hover:underline"
+          className="mt-6 inline-block text-sm font-semibold text-brand-blue underline-offset-4 hover:underline"
         >
           Parliamone insieme →
         </a>

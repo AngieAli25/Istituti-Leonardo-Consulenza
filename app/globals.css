@@ -31,6 +31,6 @@ body {
 
 /* Focus accessibile brand */
 :focus-visible {
-  outline: 2px solid var(--brand-red);
+  outline: 2px solid var(--brand-blue);
   outline-offset: 2px;
 }

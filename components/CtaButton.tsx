@@ -8,7 +8,7 @@ type CtaButtonProps = {
   fullWidth?: boolean;
 };
 
-/** CTA primaria brand (rosso = azione) */
+/** CTA primaria brand (blu = azione) */
 export function CtaButton({
   href = "#prenota",
   onClick,
@@ -19,9 +19,9 @@ export function CtaButton({
   fullWidth = false,
 }: CtaButtonProps) {
   const classes = [
-    "inline-flex items-center justify-center rounded-xl bg-brand-red px-6 py-3.5",
+    "inline-flex items-center justify-center rounded-xl bg-brand-blue px-6 py-3.5",
     "text-base font-semibold text-white shadow-md transition",
-    "hover:bg-[#c41c23] hover:shadow-lg active:scale-[0.98]",
+    "hover:bg-[#1a4a7a] hover:shadow-lg active:scale-[0.98]",
     "disabled:cursor-not-allowed disabled:opacity-60",
     fullWidth ? "w-full" : "",
     className,

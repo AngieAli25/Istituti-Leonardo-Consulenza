@@ -108,17 +108,17 @@ export function ConsultationForm() {
   if (success) {
     return (
       <div
-        className="rounded-2xl border border-brand-blue/20 bg-brand-blue/5 p-6 text-center sm:p-8"
+        className="rounded-2xl border border-brand-red/20 bg-brand-red/5 p-6 text-center sm:p-8"
         role="status"
       >
-        <p className="text-lg font-semibold text-brand-blue">Grazie!</p>
+        <p className="text-lg font-semibold text-brand-red">Grazie!</p>
         <p className="mt-3 text-sm leading-relaxed text-brand-text">
           Abbiamo ricevuto la tua richiesta. Ti ricontatteremo a breve.
         </p>
         <button
           type="button"
           onClick={() => setSuccess(false)}
-          className="mt-5 text-sm font-semibold text-brand-red underline-offset-4 hover:underline"
+          className="mt-5 text-sm font-semibold text-brand-blue underline-offset-4 hover:underline"
         >
           Invia un&apos;altra richiesta
         </button>
@@ -222,7 +222,7 @@ export function ConsultationForm() {
             type="checkbox"
             checked={form.privacy}
             onChange={(e) => update("privacy", e.target.checked)}
-            className="mt-1 h-4 w-4 rounded border-gray-300 text-brand-red accent-brand-red"
+            className="mt-1 h-4 w-4 rounded border-gray-300 text-brand-blue accent-brand-blue"
             required
           />
           <span>
@@ -231,7 +231,7 @@ export function ConsultationForm() {
               href="https://www.recuperoanniscolasticiamilano.it/privacy-policy/"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-semibold text-brand-blue underline-offset-2 hover:underline"
+              className="font-semibold text-brand-red underline-offset-2 hover:underline"
             >
               informativa sulla privacy
             </a>

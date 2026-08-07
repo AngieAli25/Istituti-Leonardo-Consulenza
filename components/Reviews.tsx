@@ -43,7 +43,7 @@ export function Reviews() {
     <section className="bg-brand-muted px-5 py-14 sm:py-16">
       <div className="mx-auto max-w-5xl">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-2xl font-bold text-brand-blue sm:text-3xl">
+          <h2 className="text-2xl font-bold text-brand-red sm:text-3xl">
             Dicono di noi
           </h2>
           <p className="mt-4 text-base leading-relaxed text-brand-text">
@@ -58,12 +58,12 @@ export function Reviews() {
               key={r.author}
               className="flex flex-col rounded-2xl bg-white p-5 shadow-sm sm:p-6"
             >
-              <div className="mb-3 flex gap-0.5 text-brand-red" aria-hidden>
+              <div className="mb-3 flex gap-0.5 text-brand-blue" aria-hidden>
                 {Array.from({ length: 5 }).map((_, i) => (
                   <span key={i}>★</span>
                 ))}
               </div>
-              <h3 className="text-base font-bold leading-snug text-brand-blue">
+              <h3 className="text-base font-bold leading-snug text-brand-red">
                 “{r.title}”
               </h3>
               <p className="mt-3 flex-1 text-sm leading-relaxed text-brand-text">

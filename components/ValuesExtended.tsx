@@ -1,4 +1,3 @@
-import { BrandMark } from "./BrandMark";
 import { CtaButton } from "./CtaButton";
 
 const VALUES = [
@@ -33,20 +32,17 @@ export function ValuesExtended() {
   return (
     <section className="bg-white px-5 py-14 sm:py-20">
       <div className="mx-auto max-w-3xl">
-        <div className="mb-10 text-center">
-          <BrandMark />
-        </div>
         <ul className="space-y-8">
           {VALUES.map((v) => (
             <li key={v.title} className="flex gap-4">
               <span
-                className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-blue text-sm font-bold text-white"
+                className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-red text-sm font-bold text-white"
                 aria-hidden
               >
                 ✓
               </span>
               <div>
-                <h3 className="text-lg font-bold text-brand-blue">{v.title}</h3>
+                <h3 className="text-lg font-bold text-brand-red">{v.title}</h3>
                 <p className="mt-1.5 text-base leading-relaxed text-brand-text">
                   {v.text}
                 </p>

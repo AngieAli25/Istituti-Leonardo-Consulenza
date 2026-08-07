@@ -8,14 +8,14 @@ export function Hero() {
     <section className="relative overflow-hidden">
       {/* Sfondo gradient brand + overlay */}
       <div
-        className="absolute inset-0 bg-gradient-to-br from-brand-blue via-[#1a4a7a] to-[#0f2d4a]"
+        className="absolute inset-0 bg-gradient-to-br from-brand-red via-[#a8181e] to-[#6b0f14]"
         aria-hidden
       />
       <div
         className="absolute inset-0 opacity-30"
         style={{
           backgroundImage:
-            "radial-gradient(circle at 20% 40%, rgba(222,32,40,0.45), transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15), transparent 40%)",
+            "radial-gradient(circle at 20% 40%, rgba(33,90,153,0.45), transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15), transparent 40%)",
         }}
         aria-hidden
       />
@@ -23,7 +23,7 @@ export function Hero() {
         className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1571260899304-425eee4c7efc?auto=format&fit=crop&w=1600&q=70')] bg-cover bg-[center_30%] opacity-45"
         aria-hidden
       />
-      <div className="absolute inset-0 bg-brand-blue/55" aria-hidden />
+      <div className="absolute inset-0 bg-brand-red/55" aria-hidden />
 
       <div className="relative mx-auto flex max-w-3xl flex-col items-center px-5 pb-16 pt-8 text-center sm:pb-24 sm:pt-12">
         <Image

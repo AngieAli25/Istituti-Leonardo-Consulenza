@@ -1,14 +1,12 @@
 import Image from "next/image";
 import { LOGO_URL } from "@/lib/brand";
-import { BrandMark } from "./BrandMark";
 import { CtaButton } from "./CtaButton";
 
 /** SEZIONE 7 — Info pratiche + Footer */
 export function FooterInfo() {
   return (
-    <footer className="bg-brand-blue text-white">
+    <footer className="bg-brand-red text-white">
       <div className="mx-auto max-w-4xl px-5 py-14 text-center sm:py-16">
-        <BrandMark />
         <h2 className="text-xl font-bold sm:text-2xl">Vieni a trovarci</h2>
 
         <p className="mt-4 text-base text-white/90">

@@ -8,7 +8,7 @@ function Icon({ d }: { d: string }) {
       strokeWidth="1.75"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="h-6 w-6 text-brand-blue"
+      className="h-6 w-6 text-brand-red"
       aria-hidden
     >
       <path d={d} />
@@ -60,7 +60,7 @@ export function StrengthsGrid() {
   return (
     <section className="bg-brand-muted px-5 py-14 sm:py-16">
       <div className="mx-auto max-w-5xl">
-        <h2 className="text-center text-2xl font-bold text-brand-blue sm:text-3xl">
+        <h2 className="text-center text-2xl font-bold text-brand-red sm:text-3xl">
           Cosa troverai da Istituti Leonardo Milano
         </h2>
 
@@ -70,7 +70,7 @@ export function StrengthsGrid() {
               key={item.title}
               className="flex items-start gap-3 rounded-2xl bg-white p-4 shadow-sm"
             >
-              <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-blue/10">
+              <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-red/10">
                 <Icon d={item.path} />
               </span>
               <span className="pt-2 text-sm font-semibold leading-snug text-brand-text">

@@ -1,4 +1,3 @@
-import { BrandMark } from "./BrandMark";
 import { ConsultationForm } from "./ConsultationForm";
 
 /** SEZIONE 6 — Form lead (prenota consulenza) */
@@ -7,7 +6,6 @@ export function BookingSection() {
     <section id="prenota" className="scroll-mt-4 bg-white px-5 py-14 sm:py-20">
       <div className="mx-auto max-w-xl">
         <div className="text-center">
-          <BrandMark />
           <h2 className="text-2xl font-bold text-brand-red sm:text-3xl">
             Prenota la tua consulenza gratuita
           </h2>

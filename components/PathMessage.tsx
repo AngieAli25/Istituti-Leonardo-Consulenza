@@ -3,7 +3,7 @@ export function PathMessage() {
   return (
     <section className="bg-white px-5 py-14 sm:py-20">
       <div className="mx-auto max-w-3xl text-center">
-        <h2 className="text-2xl font-bold text-brand-blue sm:text-3xl">
+        <h2 className="text-2xl font-bold text-brand-red sm:text-3xl">
           Un percorso costruito su di te
         </h2>
         <p className="mt-6 text-base leading-relaxed text-brand-text sm:text-lg">
