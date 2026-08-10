@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 import { PERCORSI } from "@/lib/percorsi";
 import { CtaButton } from "./CtaButton";
 
@@ -45,10 +46,10 @@ const inputClass =
 
 /** Form di lead generation con menu percorsi */
 export function ConsultationForm() {
+  const router = useRouter();
   const [form, setForm] = useState<FormState>(INITIAL);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [serverError, setServerError] = useState("");
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
@@ -94,36 +95,13 @@ export function ConsultationForm() {
       // if (typeof window !== 'undefined' && window.fbq) window.fbq('track', 'Lead');
       // if (typeof window !== 'undefined' && window.gtag) window.gtag('event', 'conversion', { ... });
 
-      setSuccess(true);
-      setForm(INITIAL);
+      router.push("/grazie");
     } catch {
       setServerError(
         "Si è verificato un problema nell'invio. Riprova o chiamaci direttamente.",
       );
-    } finally {
       setSubmitting(false);
     }
-  }
-
-  if (success) {
-    return (
-      <div
-        className="rounded-2xl border border-brand-red/20 bg-brand-red/5 p-6 text-center sm:p-8"
-        role="status"
-      >
-        <p className="text-lg font-semibold text-brand-red">Grazie!</p>
-        <p className="mt-3 text-sm leading-relaxed text-brand-text">
-          Abbiamo ricevuto la tua richiesta. Ti ricontatteremo a breve.
-        </p>
-        <button
-          type="button"
-          onClick={() => setSuccess(false)}
-          className="mt-5 text-sm font-semibold text-brand-blue underline-offset-4 hover:underline"
-        >
-          Invia un&apos;altra richiesta
-        </button>
-      </div>
-    );
   }
 
   return (
