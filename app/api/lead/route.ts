@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 
+const WEBHOOK_URL =
+  "https://automations.wolfoncloud.com/webhook/50ab3d58-3fc4-4c42-bfa1-d57a03ecec60";
+
 type LeadPayload = {
   nome?: string;
   cognome?: string;
@@ -10,8 +13,7 @@ type LeadPayload = {
 };
 
 /**
- * Endpoint placeholder per l'invio lead.
- * TODO: collegare invio form al CRM (Formspree / webhook / CRM interno).
+ * Riceve il form e inoltra il lead al webhook CRM.
  * Il campo "percorso" è obbligatorio nel payload per la qualifica del lead.
  */
 export async function POST(request: Request) {
@@ -25,15 +27,20 @@ export async function POST(request: Request) {
 
   const { nome, cognome, email, telefono, percorso } = body;
 
-  if (!nome?.trim() || !cognome?.trim() || !email?.trim() || !telefono?.trim() || !percorso?.trim()) {
+  if (
+    !nome?.trim() ||
+    !cognome?.trim() ||
+    !email?.trim() ||
+    !telefono?.trim() ||
+    !percorso?.trim()
+  ) {
     return NextResponse.json(
       { error: "Campi obbligatori mancanti" },
       { status: 400 },
     );
   }
 
-  // Placeholder: log in console in sviluppo. Sostituire con integrazione reale.
-  console.log("[lead]", {
+  const payload = {
     nome: nome.trim(),
     cognome: cognome.trim(),
     email: email.trim(),
@@ -41,7 +48,29 @@ export async function POST(request: Request) {
     percorso: percorso.trim(),
     note: body.note?.trim() || "",
     receivedAt: new Date().toISOString(),
-  });
+  };
+
+  try {
+    const webhookRes = await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!webhookRes.ok) {
+      console.error("[lead] webhook error", webhookRes.status, await webhookRes.text());
+      return NextResponse.json(
+        { error: "Errore invio webhook" },
+        { status: 502 },
+      );
+    }
+  } catch (err) {
+    console.error("[lead] webhook fetch failed", err);
+    return NextResponse.json(
+      { error: "Errore connessione webhook" },
+      { status: 502 },
+    );
+  }
 
   return NextResponse.json({ ok: true });
 }

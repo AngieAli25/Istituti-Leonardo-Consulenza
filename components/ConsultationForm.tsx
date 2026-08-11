@@ -74,7 +74,6 @@ export function ConsultationForm() {
     setSubmitting(true);
 
     try {
-      // TODO: collegare invio form al CRM (Formspree / webhook / CRM)
       // Importante: il campo "percorso" deve essere nel payload per qualificare il lead
       const res = await fetch("/api/lead", {
         method: "POST",
