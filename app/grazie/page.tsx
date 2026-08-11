@@ -39,19 +39,6 @@ export default function GraziePage() {
             adatto a te.
           </p>
 
-          <div className="mt-8 space-y-3 text-sm text-white/85">
-            <p>
-              Nel frattempo puoi chiamarci:{" "}
-              <a href="tel:+390223189073" className="font-semibold underline-offset-2 hover:underline">
-                02 23 189 073
-              </a>
-              {" · "}
-              <a href="tel:+393285987754" className="font-semibold underline-offset-2 hover:underline">
-                +39 328 598 7754
-              </a>
-            </p>
-          </div>
-
           <Link
             href="/"
             className="mt-10 inline-flex items-center justify-center rounded-xl bg-brand-blue px-6 py-3.5 text-base font-semibold text-white shadow-md transition hover:bg-[#1a4a7a] hover:shadow-lg"
