@@ -1,3 +1,5 @@
+"use client";
+
 type CtaButtonProps = {
   href?: string;
   onClick?: () => void;
@@ -7,6 +9,11 @@ type CtaButtonProps = {
   disabled?: boolean;
   fullWidth?: boolean;
 };
+
+function scrollToBooking(e: React.MouseEvent<HTMLAnchorElement>) {
+  e.preventDefault();
+  document.getElementById("prenota")?.scrollIntoView({ behavior: "smooth" });
+}
 
 /** CTA primaria brand (blu = azione) */
 export function CtaButton({
@@ -30,8 +37,17 @@ export function CtaButton({
     .join(" ");
 
   if (href && type !== "submit") {
+    const isBookingAnchor = href === "#prenota";
+
     return (
-      <a href={href} onClick={onClick} className={classes}>
+      <a
+        href={isBookingAnchor ? "#" : href}
+        onClick={(e) => {
+          if (isBookingAnchor) scrollToBooking(e);
+          onClick?.();
+        }}
+        className={classes}
+      >
         {children}
       </a>
     );

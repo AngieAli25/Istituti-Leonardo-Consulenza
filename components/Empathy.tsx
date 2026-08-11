@@ -1,3 +1,5 @@
+"use client";
+
 /** SEZIONE 2 — Empatia: intercetta il bisogno */
 export function Empathy() {
   return (
@@ -13,7 +15,13 @@ export function Empathy() {
           cambiare.
         </p>
         <a
-          href="#prenota"
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            document
+              .getElementById("prenota")
+              ?.scrollIntoView({ behavior: "smooth" });
+          }}
           className="mt-6 inline-block text-sm font-semibold text-brand-blue underline-offset-4 hover:underline"
         >
           Parliamone insieme →
