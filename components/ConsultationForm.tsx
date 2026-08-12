@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { trackMetaLead } from "@/lib/meta-pixel";
 import { PERCORSI } from "@/lib/percorsi";
 import { CtaButton } from "./CtaButton";
 
@@ -90,10 +91,7 @@ export function ConsultationForm() {
 
       if (!res.ok) throw new Error("Errore invio");
 
-      // TODO tracking: evento Lead Meta Pixel + Google Ads sul submit riuscito
-      // if (typeof window !== 'undefined' && window.fbq) window.fbq('track', 'Lead');
-      // if (typeof window !== 'undefined' && window.gtag) window.gtag('event', 'conversion', { ... });
-
+      trackMetaLead();
       router.push("/grazie");
     } catch {
       setServerError(

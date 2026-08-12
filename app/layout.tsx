@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import { MetaPixel } from "@/components/MetaPixel";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -19,7 +20,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="it" className={`${poppins.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans text-brand-text">
-        {/* TODO tracking: inserire Meta Pixel e Google Ads tag in <head> */}
+        <MetaPixel />
         {children}
       </body>
     </html>
