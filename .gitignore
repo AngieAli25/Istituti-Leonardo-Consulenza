@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Relatia token (mai committare)
+google-apps-script/Config.gs
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
-import { createRelatiaLead } from "@/lib/relatia";
 
 const WEBHOOK_URL =
   "https://automations.wolfoncloud.com/webhook/50ab3d58-3fc4-4c42-bfa1-d57a03ecec60";
+
+/** Stesso webhook Apps Script di YES Consulenza: foglio "Consulenza" + Relatia. */
+const SHEET_RELATIA_URL =
+  "https://script.google.com/macros/s/AKfycbwFMck9uhTMXCWz0cIYbOiL2e1cJTnMlmYiJxhJqjV8SYBYYDYg48vfKjXl9-EZgsXk/exec";
 
 type LeadPayload = {
   nome?: string;
@@ -15,11 +18,11 @@ type LeadPayload = {
 
 /**
  * Riceve il form e:
- * - inoltra il lead al webhook esistente
- * - crea contatto + deal in Relatia (pipeline ISTITUTI LEONARDO MILANO, stage NUOVO CONTATTO)
+ * - inoltra il lead al webhook n8n già in uso
+ * - scrive la riga sul foglio Google "Consulenza" e crea il contatto in Relatia
+ *   (pipeline ISTITUTI LEONARDO MILANO, stage NUOVO CONTATTO), come YES Consulenza
  *
- * Come per YES Consulenza, un errore Relatia non blocca l'invio: il lead resta
- * sul webhook e la landing riceve ok.
+ * Se Relatia fallisce, il foglio resta compilato e la landing riceve ok.
  */
 export async function POST(request: Request) {
   let body: LeadPayload;
@@ -55,41 +58,52 @@ export async function POST(request: Request) {
     receivedAt: new Date().toISOString(),
   };
 
+  let webhookOk = false;
   try {
     const webhookRes = await fetch(WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-
+    webhookOk = webhookRes.ok;
     if (!webhookRes.ok) {
       console.error("[lead] webhook error", webhookRes.status, await webhookRes.text());
-      return NextResponse.json(
-        { error: "Errore invio webhook" },
-        { status: 502 },
-      );
     }
   } catch (err) {
     console.error("[lead] webhook fetch failed", err);
-    return NextResponse.json(
-      { error: "Errore connessione webhook" },
-      { status: 502 },
-    );
   }
 
+  let sheetOk = false;
   let relatia = false;
   try {
-    await createRelatiaLead({
-      firstName: payload.nome,
-      lastName: payload.cognome,
-      email: payload.email,
-      phone: payload.telefono,
-      percorso: payload.percorso,
-      note: payload.note,
+    const scriptRes = await fetch(SHEET_RELATIA_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        target: "istituti-leonardo",
+        nome: payload.nome,
+        cognome: payload.cognome,
+        email: payload.email,
+        telefono: payload.telefono,
+        percorso: payload.percorso,
+        note: payload.note,
+      }),
     });
-    relatia = true;
+    const scriptBody = (await scriptRes.json()) as {
+      ok?: boolean;
+      relatia?: { contact_id?: string } | null;
+    };
+    sheetOk = scriptRes.ok && scriptBody.ok !== false;
+    relatia = Boolean(scriptBody.relatia);
+    if (!sheetOk) {
+      console.error("[lead] sheet/relatia error", scriptRes.status, scriptBody);
+    }
   } catch (err) {
-    console.error("[lead] relatia error", err);
+    console.error("[lead] sheet/relatia fetch failed", err);
+  }
+
+  if (!webhookOk && !sheetOk) {
+    return NextResponse.json({ error: "Errore invio lead" }, { status: 502 });
   }
 
   return NextResponse.json({ ok: true, relatia });
