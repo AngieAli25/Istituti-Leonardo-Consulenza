@@ -28,6 +28,10 @@ const INITIAL: FormState = {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/** Stesso webhook di YES Consulenza: foglio + Relatia nello stesso invio. */
+const LEAD_WEBHOOK_URL =
+  "https://script.google.com/macros/s/AKfycbwFMck9uhTMXCWz0cIYbOiL2e1cJTnMlmYiJxhJqjV8SYBYYDYg48vfKjXl9-EZgsXk/exec";
+
 type FieldErrors = Partial<Record<keyof FormState, string>>;
 
 function validate(data: FormState): FieldErrors {
@@ -75,21 +79,43 @@ export function ConsultationForm() {
     setSubmitting(true);
 
     try {
-      // Importante: il campo "percorso" deve essere nel payload per qualificare il lead
-      const res = await fetch("/api/lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          nome: form.nome.trim(),
-          cognome: form.cognome.trim(),
-          email: form.email.trim(),
-          telefono: form.telefono.trim(),
-          percorso: form.percorso,
-          note: form.note.trim(),
-        }),
-      });
+      const lead = {
+        nome: form.nome.trim(),
+        cognome: form.cognome.trim(),
+        email: form.email.trim(),
+        telefono: form.telefono.trim(),
+        percorso: form.percorso,
+        note: form.note.trim(),
+      };
 
-      if (!res.ok) throw new Error("Errore invio");
+      // Come YES: il browser chiama lo script, che scrive il foglio e crea il deal.
+      let sent = false;
+      try {
+        const direct = await fetch(LEAD_WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ target: "istituti-leonardo", ...lead }),
+        });
+        if (!direct.ok) throw new Error("submit_failed");
+        try {
+          const payload = (await direct.json()) as { ok?: boolean };
+          if (payload && payload.ok === false) throw new Error("submit_failed");
+        } catch (err) {
+          if (err instanceof Error && err.message === "submit_failed") throw err;
+        }
+        sent = true;
+      } catch {
+        sent = false;
+      }
+
+      if (!sent) {
+        const res = await fetch("/api/lead", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(lead),
+        });
+        if (!res.ok) throw new Error("Errore invio");
+      }
 
       trackMetaLead();
       router.push("/grazie");

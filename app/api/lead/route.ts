@@ -17,11 +17,9 @@ type LeadPayload = {
 };
 
 /**
- * Riceve il form e:
- * - inoltra il lead al webhook n8n già in uso
- * - scrive la riga sul foglio Google "Consulenza" e crea il contatto in Relatia
- *   (pipeline ISTITUTI LEONARDO MILANO, stage NUOVO CONTATTO), come YES Consulenza
- *
+ * Stesso collegamento di YES Consulenza: un invio scrive il foglio "Consulenza"
+ * e crea contatto + deal in Relatia (pipeline ISTITUTI LEONARDO MILANO,
+ * stage NUOVO CONTATTO). n8n resta solo se lo script non scrive il foglio.
  * Se Relatia fallisce, il foglio resta compilato e la landing riceve ok.
  */
 export async function POST(request: Request) {
@@ -58,21 +56,6 @@ export async function POST(request: Request) {
     receivedAt: new Date().toISOString(),
   };
 
-  let webhookOk = false;
-  try {
-    const webhookRes = await fetch(WEBHOOK_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    webhookOk = webhookRes.ok;
-    if (!webhookRes.ok) {
-      console.error("[lead] webhook error", webhookRes.status, await webhookRes.text());
-    }
-  } catch (err) {
-    console.error("[lead] webhook fetch failed", err);
-  }
-
   let sheetOk = false;
   let relatia = false;
   try {
@@ -91,15 +74,33 @@ export async function POST(request: Request) {
     });
     const scriptBody = (await scriptRes.json()) as {
       ok?: boolean;
+      sheet?: boolean;
       relatia?: { contact_id?: string } | null;
     };
-    sheetOk = scriptRes.ok && scriptBody.ok !== false;
+    sheetOk = scriptRes.ok && scriptBody.ok !== false && scriptBody.sheet !== false;
     relatia = Boolean(scriptBody.relatia);
     if (!sheetOk) {
       console.error("[lead] sheet/relatia error", scriptRes.status, scriptBody);
     }
   } catch (err) {
     console.error("[lead] sheet/relatia fetch failed", err);
+  }
+
+  let webhookOk = false;
+  if (!sheetOk) {
+    try {
+      const webhookRes = await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      webhookOk = webhookRes.ok;
+      if (!webhookRes.ok) {
+        console.error("[lead] webhook error", webhookRes.status, await webhookRes.text());
+      }
+    } catch (err) {
+      console.error("[lead] webhook fetch failed", err);
+    }
   }
 
   if (!webhookOk && !sheetOk) {
